@@ -1,9 +1,9 @@
 const express = require('express');
+
 const cors = require('cors');
 
 const app = express();
 app.use(cors());
-
 let todos = [
   { id: 3, content: 'Javascript', completed: false },
   { id: 2, content: 'CSS', completed: true },

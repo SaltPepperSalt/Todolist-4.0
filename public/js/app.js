@@ -1,5 +1,7 @@
 import { ajax } from './ajax.js';
 import { promiseAjax } from './ajax.js';
+import { req } from './ajax.js';
+import { response } from 'express';
 
 
 // State
@@ -30,39 +32,70 @@ const getTodos = () => {
   //   todos = todos.sort((todo1, todo2) => todo2.id - todo1.id);
   //   render();
   // });
-  promiseAjax.get('/todos')
-  .then(_todos => {
-    todos = _todos;
-    todos = todos.sort((todo1, todo2) => todo2.id - todo1.id);
-    render();
-  });;
+
+  // promiseAjax.get('/todos')
+  // .then(_todos => {
+  //   todos = _todos;
+  //   todos = todos.sort((todo1, todo2) => todo2.id - todo1.id);
+  //   render();
+  // });;
+
+  req.get('/todos')
+    .then(response => response.json())
+    .then(_todos => todos = _todos)
+    .then(() => todos = todos.sort((todo1, todo2) => todo2.id - todo1.id))
+    .then(render);
 };
 
 const getId = () => (todos.length ? Math.max(...todos.map(todo => todo.id)) + 1 : 1);
 
 const addTodo = content => {
   //ajax.post('/todos', { id: getId(), content, completed: false }, renderCallback)
-  promiseAjax.post('/todos', { id: getId(), content, completed: false })
-  .then(renderCallback)
+
+  // promiseAjax.post('/todos', { id: getId(), content, completed: false })
+  // .then(renderCallback)
+
+  req.post('/todos', { id: getId(), content, completed: false })
+    .then(response => response.json())
+    .then(_todos => todos = _todos)
+    .then(render);
 };
 
 const removeTodo = id => {
   // ajax.delete(`/todos/${id}`, renderCallback);
-  promiseAjax.delete(`/todos/${id}`)
-  .then(renderCallback);
+
+  // promiseAjax.delete(`/todos/${id}`)
+  // .then(renderCallback);
+
+  req.delete(`/todos/${id}`)
+    .then(response => response.json())
+    .then(_todos => todos = _todos)
+    .then(render);
 };
 
 const toggleTodo = id => {
   const completed = !todos.filter(todo => todo.id === todo).completed;
   // ajax.patch(`/todos/${id}`, { completed }, renderCallback)
-  promiseAjax.patch(`/todos/${id}`, { completed })
-  .then(renderCallback);
+
+  // promiseAjax.patch(`/todos/${id}`, { completed })
+  // .then(renderCallback);
+
+  req.patch(`/todos/${id}`, { completed })
+    .then(response => response.json())
+    .then(_todos => todos = _todos)
+    .then(render);
 };
 
 const completeAll = completed => {
   // ajax.patch(`/todos`, { completed }, renderCallback)
-  promiseAjax.patch(`/todos`, { completed })
-  .then(renderCallback);
+
+  // promiseAjax.patch(`/todos`, { completed })
+  // .then(renderCallback);
+
+  req.patch(`/todos`, { completed })
+    .then(response => response.json())
+    .then(_todos => todos = _todos)
+    .then(render);
 };
 
 const toggleCompleteall = checked => {
@@ -71,8 +104,13 @@ const toggleCompleteall = checked => {
 
 const clearCompleted = () => {
   // ajax.delete('/todos/completed', renderCallback);
-  promiseAjax.delete('/todos/completed')
-  .then(renderCallback);
+  // promiseAjax.delete('/todos/completed')
+  // .then(renderCallback);
+
+  req.delete('/todos/completed')
+    .then(response => response.json())
+    .then(_todos => todos = _todos)
+    .then(render);
 };
 
 const activeList = mode => ((mode === 'active') 
@@ -83,7 +121,7 @@ const activeList = mode => ((mode === 'active')
 
 const render = () => {
   let html = '';
-  const cpTodos = activeList($nav.querySelector('.active').id);
+  const cpTodos = activeList(mode);
   cpTodos.forEach(({ id, content, completed }) => {
     html += `<li id="${id}" class="todo-item">
     <input id="ck-${id}" class="checkbox" type="checkbox" ${completed ? 'checked' : ''}>
@@ -135,4 +173,3 @@ $completeAll.onclick = ({ target }) => {
 };
 
 $clearCompleted.onclick = clearCompleted;
-
