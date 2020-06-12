@@ -56,8 +56,7 @@ const addTodo = content => {
 
   req.post('/todos', { id: getId(), content, completed: false })
     .then(response => response.json())
-    .then(_todos => todos = _todos)
-    .then(render);
+    .then(renderCallback)
 };
 
 const removeTodo = id => {
@@ -68,21 +67,18 @@ const removeTodo = id => {
 
   req.delete(`/todos/${id}`)
     .then(response => response.json())
-    .then(_todos => todos = _todos)
-    .then(render);
+    .then(renderCallback)
 };
 
 const toggleTodo = id => {
-  const completed = !todos.filter(todo => todo.id === todo).completed;
+  const completed = !todos.find(todo => todo.id === +id).completed;
   // ajax.patch(`/todos/${id}`, { completed }, renderCallback)
 
   // promiseAjax.patch(`/todos/${id}`, { completed })
   // .then(renderCallback);
-
   req.patch(`/todos/${id}`, { completed })
     .then(response => response.json())
-    .then(_todos => todos = _todos)
-    .then(render);
+    .then(renderCallback)
 };
 
 const completeAll = completed => {
@@ -93,8 +89,7 @@ const completeAll = completed => {
 
   req.patch(`/todos`, { completed })
     .then(response => response.json())
-    .then(_todos => todos = _todos)
-    .then(render);
+    .then(renderCallback)
 };
 
 const toggleCompleteall = checked => {
@@ -103,13 +98,13 @@ const toggleCompleteall = checked => {
 
 const clearCompleted = () => {
   // ajax.delete('/todos/completed', renderCallback);
+
   // promiseAjax.delete('/todos/completed')
   // .then(renderCallback);
 
   req.delete('/todos/completed')
     .then(response => response.json())
-    .then(_todos => todos = _todos)
-    .then(render);
+    .then(renderCallback)
 };
 
 const activeList = mode => ((mode === 'active') 
