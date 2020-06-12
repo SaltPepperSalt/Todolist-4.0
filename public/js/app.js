@@ -1,7 +1,6 @@
 import { ajax } from './ajax.js';
 import { promiseAjax } from './ajax.js';
 import { req } from './ajax.js';
-import { response } from 'express';
 
 
 // State
