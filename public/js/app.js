@@ -3,6 +3,8 @@ import { promiseAjax } from './ajax.js';
 import { req } from './ajax.js';
 
 
+
+
 // State
 let todos = [];
 
@@ -39,8 +41,14 @@ const getTodos = () => {
   //   render();
   // });;
 
-  req.get('/todos')
-    .then(response => response.json())
+  // req.get('/todos')
+  //   .then(response => response.json())
+  //   .then(_todos => todos = _todos)
+  //   .then(() => todos = todos.sort((todo1, todo2) => todo2.id - todo1.id))
+  //   .then(render);
+
+  axios.get('/todos')
+    .then(response => response.data)
     .then(_todos => todos = _todos)
     .then(() => todos = todos.sort((todo1, todo2) => todo2.id - todo1.id))
     .then(render);
@@ -54,9 +62,13 @@ const addTodo = content => {
   // promiseAjax.post('/todos', { id: getId(), content, completed: false })
   // .then(renderCallback)
 
-  req.post('/todos', { id: getId(), content, completed: false })
-    .then(response => response.json())
-    .then(renderCallback)
+  // req.post('/todos', { id: getId(), content, completed: false })
+  //   .then(response => response.json())
+  //   .then(renderCallback);
+
+  axios.post('/todos', { id: getId(), content, completed: false })
+    .then(response => response.data)
+    .then(renderCallback);
 };
 
 const removeTodo = id => {
@@ -65,9 +77,13 @@ const removeTodo = id => {
   // promiseAjax.delete(`/todos/${id}`)
   // .then(renderCallback);
 
-  req.delete(`/todos/${id}`)
-    .then(response => response.json())
-    .then(renderCallback)
+  // req.delete(`/todos/${id}`)
+  //   .then(response => response.json())
+  //   .then(renderCallback)
+
+  axios.delete(`/todos/${id}`)
+    .then(response => response.data)
+    .then(renderCallback);
 };
 
 const toggleTodo = id => {
@@ -76,8 +92,13 @@ const toggleTodo = id => {
 
   // promiseAjax.patch(`/todos/${id}`, { completed })
   // .then(renderCallback);
-  req.patch(`/todos/${id}`, { completed })
-    .then(response => response.json())
+
+  // req.patch(`/todos/${id}`, { completed })
+  //   .then(response => response.json())
+  //   .then(renderCallback)
+
+  axios.patch(`/todos/${id}`, { completed })
+    .then(response => response.data)
     .then(renderCallback)
 };
 
@@ -87,8 +108,11 @@ const completeAll = completed => {
   // promiseAjax.patch(`/todos`, { completed })
   // .then(renderCallback);
 
-  req.patch(`/todos`, { completed })
-    .then(response => response.json())
+  // req.patch(`/todos`, { completed })
+  //   .then(response => response.json())
+  //   .then(renderCallback)
+  axios.patch(`/todos`, { completed })
+    .then(response => response.data())
     .then(renderCallback)
 };
 
@@ -102,8 +126,12 @@ const clearCompleted = () => {
   // promiseAjax.delete('/todos/completed')
   // .then(renderCallback);
 
-  req.delete('/todos/completed')
-    .then(response => response.json())
+  // req.delete('/todos/completed')
+  //   .then(response => response.json())
+  //   .then(renderCallback)
+
+  axios.delete('/todos/completed')
+    .then(response => response.data)
     .then(renderCallback)
 };
 
